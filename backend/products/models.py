@@ -21,7 +21,7 @@ class Product(models.Model):
     stock = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    qr_code = models.ImageField(upload_to='qr_codes/', blank=True)
+    qr_code = models.ImageField(upload_to='products/qr_codes/', blank=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
