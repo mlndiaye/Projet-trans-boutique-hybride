@@ -1,25 +1,26 @@
-<div class="d-flex justify-content-between align-items-center border mx-auto" style="width: 75%;">
-  <div>
-      <img src="assets/img/image.png" alt="ecommerce image" class="img-fluid" width="600">
+<div class="container" style="width: 75%;">
+  <div class="d-flex justify-content-between align-items-center border mx-auto row" >
+    <div class="col-md-6 px-0 h-100">
+      <img src="assets/img/image.png" alt="ecommerce image" class="img-fluid h-100" >
     </div>
-    <div class="me-5">
+    <div class="col-md-4 mt-3 px-0 me-5">
       <div class="mb-4">
         <h3>Connectez-vous sur PolyShop</h3>
         <p>Entrez tes informations de connexion</p>
       </div>
-
-      <form>
+  
+      <form class="form-group" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="mb-4">
-          <input type="email" class="form-control-1 w-100" id="email" aria-describedby="emailHelp" placeholder="Email"><!-- aria-describedby? -->
+          <input type="email" class="form-control-1 w-100" id="email" formControlName="email" placeholder="Email"><!-- aria-describedby? -->
         </div>
         <div class="mb-4">
-          <input type="password" class="form-control-1 w-100" id="password" placeholder="Mot de passe">
+          <input type="password" class="form-control-1 w-100" id="password" formControlName="password" placeholder="Mot de passe">
         </div>
-        <div>
+        <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-danger me-3">Se connecter</button>
             <a href="#" style="font-size: small;" class="text-danger">Mot de passe oublié ?</a>
-        </div>   
+        </div>
       </form>
     </div>
   </div>
-  
+</div>

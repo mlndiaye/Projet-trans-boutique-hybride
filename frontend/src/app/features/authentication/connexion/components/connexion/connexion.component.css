@@ -7,4 +7,8 @@ input:focus {
     box-shadow: none; /* Supprime l'ombre */
     border-color: black; /* Réinitialise la couleur de la bordure */
   }
-  
+@media only screen and (min-width: 768px) and (max-width: 868px){
+    button[type=submit]{
+        font-size: small;
+    }
+}
