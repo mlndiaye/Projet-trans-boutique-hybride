@@ -1,0 +1,9 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>QR Code pour {{ product.name_product }}</h1>
+<img src="{{ product.qr_code.url }}" alt="QR Code du produit">
+<p>
+    <a href="{% url 'admin:products_product_change' product.id_product %}">Retour à l'édition du produit</a>
+</p>
+{% endblock %}
