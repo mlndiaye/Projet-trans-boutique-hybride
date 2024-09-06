@@ -32,7 +32,7 @@ class UserModel(AbstractBaseUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    adress = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True)
     phone_number = models.CharField(max_length=15)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100, blank=True)

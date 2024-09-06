@@ -45,3 +45,18 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         token['email'] = user.email
         return token
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ['email', 'first_name', 'last_name', 'phone_number', 
+                    'address', 'city', 'country', 'zip_code', 'profile_photo']
+        
+class AdminUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer pour les administrateurs (superutilisateurs).
+    Affiche tous les champs.
+    """
+    class Meta:
+        model = UserModel
+        fields = '__all__'  # Affiche tous les champs du modèle
