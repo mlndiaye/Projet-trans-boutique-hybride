@@ -1,0 +1,54 @@
+<div class="container" style="width: 75%;">
+  <div class="d-flex justify-content-between align-items-center border mx-auto row">
+    <div class="col-md-6 px-0 h-100">
+      <img src="assets/img/image.png" alt="ecommerce image" class="img-fluid h-100">
+    </div>
+    <div class="col-md-4 mt-3 px-0 me-5">
+      <div class="mb-4">
+        <h3>Créer un compte</h3>
+        <p>Entrez vos coordonnées ci-dessous</p>             
+      </div>
+      <form class="form-group" [formGroup]="inscriptionForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <input type="text" class="form-control-1 w-100" id="nom" formControlName="last_name" placeholder="Nom">
+          <div *ngIf="inscriptionForm.get('last_name')?.touched && inscriptionForm.get('last_name')?.invalid">
+            <small class="text-danger" *ngIf="inscriptionForm.get('last_name')?.errors?.['required']">Le nom est requis.</small>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input type="text" class="form-control-1 w-100" id="prenom" formControlName="first_name" placeholder="Prenom">
+          <div *ngIf="inscriptionForm.get('first_name')?.touched && inscriptionForm.get('first_name')?.invalid">
+            <small class="text-danger" *ngIf="inscriptionForm.get('first_name')?.errors?.['required']">Le prénom est requis.</small>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input type="email" class="form-control-1 w-100" id="email" formControlName="email" placeholder="Email">
+          <div *ngIf="inscriptionForm.get('email')?.touched && inscriptionForm.get('email')?.invalid">
+            <small class="text-danger" *ngIf="inscriptionForm.get('email')?.errors?.['required']">L'email est requis.</small>
+            <small class="text-danger" *ngIf="inscriptionForm.get('email')?.errors?.['email']">Entrez une adresse email valide.</small>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input type="password" class="form-control-1 w-100" id="password" formControlName="password" placeholder="Mot de passe">
+          <div *ngIf="inscriptionForm.get('password')?.touched && inscriptionForm.get('password')?.invalid">
+            <small class="text-danger" *ngIf="inscriptionForm.get('password')?.errors?.['required']">Le mot de passe est requis.</small>
+            <small class="text-danger" *ngIf="inscriptionForm.get('password')?.errors?.['minlength']">Le mot de passe doit comporter au moins 8 caractères.</small>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input type="password" class="form-control-1 w-100" id="confirmPassword" formControlName="confirm_password" placeholder="Confirmer mot de passe">
+          <div *ngIf="inscriptionForm.get('confirm_password')?.touched && inscriptionForm.get('confirm_password')?.invalid">
+            <small class="text-danger" *ngIf="inscriptionForm.get('confirm_password')?.errors?.['required']">La confirmation du mot de passe est requise.</small>
+          </div>
+          <div *ngIf="inscriptionForm.get('confirm_password')?.touched && inscriptionForm.errors?.['passwordMismatch']">
+            <small class="text-danger">Les mots de passe ne correspondent pas</small>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-danger border border-danger">Créer un compte</button>
+        <div class="">
+          <p class="">Vous avez déjà un compte ? <a href="/connexion" class="text-secondary">Se connecter</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
