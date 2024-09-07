@@ -1,52 +1,32 @@
-name: CI/CD
+name: Deploy to PythonAnywhere
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
 
 jobs:
-
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build and push backend Docker image
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./backend
-        file: ./backend/Dockerfile
+        context: .
         push: false
-        tags: myregistry.azurecr.io/backend:${{ github.sha }}
-        secrets: |
-          GH_USER=${{ secrets.GH_USER }}
-          GH_TOKEN=${{ secrets.GH_TOKEN }}
+        tags: your-docker-image:latest
 
-    - name: Build and push frontend Docker image  
-      uses: docker/build-push-action@v2
-      with:
-        context: ./frontend
-        file: ./frontend/Dockerfile
-        push: false
-        tags: myregistry.azurecr.io/frontend:${{ github.sha }}
-        secrets: |
-          GH_USER=${{ secrets.GH_USER }}
-          GH_TOKEN=${{ secrets.GH_TOKEN }}
-
-    - name: Deploy to staging
+    - name: Deploy to PythonAnywhere
       env:
-        BACKEND_IMAGE: myregistry.azurecr.io/backend:${{ github.sha }}
-        FRONTEND_IMAGE: myregistry.azurecr.io/frontend:${{ github.sha }}
-        STAGING_HOST: ${{ secrets.STAGING_HOST }}
-        STAGING_USER: ${{ secrets.STAGING_USER }}
-        STAGING_PASS: ${{ secrets.STAGING_PASS }}
+        PA_TOKEN: ${{ secrets.PYTHONANYWHERE_TOKEN }}
       run: |
-        # Connectez-vous à votre serveur de staging
-        ssh $STAGING_USER@$STAGING_HOST << EOF
-        # Tirez les nouvelles images Docker
-        docker pull $BACKEND_IMAGE
-        docker pull $FRONTEND_IMAGE
-        # Mettez à jour vos conteneurs en production
-        docker-compose up -d
-        EOF
+        pip install pythonanywhere
+        pa_autoconfigure_django.py --python=3.8 https://github.com/votre-nom/votre-repo.git
+        curl -X POST \
+          -H "Authorization: Token $PA_TOKEN" \
+          https://www.pythonanywhere.com/api/v0/user/mlndiaye/webapps/mlndiaye.pythonanywhere.com/reload/
