@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,14 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ak*v9_&jxa#88*vr@z24p##)_5kdgs@a02u&s-n$k-1@5v69zo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['mlndiaye.pythonanywhere.com']
-
+ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1', 'mlndiaye.pythonanywhere.com']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'products',
     'users',
+
 ]
 
 MIDDLEWARE = [
@@ -62,7 +64,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,7 +129,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# Dossier où Django recherchera les fichiers statiques
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -161,3 +170,21 @@ CORS_ALLOW_METHODS = (
     'DELETE',
     'OPTIONS'
 )
+BASE_URL = 'http://192.168.1.7:8000'
+JAZZMIN_SETTINGS = {
+    "site_title": "Page Admin",
+    "site_header": "hybride p-Shop",
+    "site_brand": "hybride P-Shop",
+    "copyright": "PolytechShop",
+
+    "show_ui_builder": True,
+    "search_model": "auth.User",  # Indique le modèle à rechercher (ici, le modèle User)
+    "search_url": "/admin/auth/user/",  # URL où se trouve la recherche
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},  # Ajoute un lien direct vers la recherche utilisateur
+        {"app": "products"}
+
+    ],
+
+}
