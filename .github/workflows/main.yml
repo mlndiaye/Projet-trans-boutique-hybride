@@ -20,7 +20,7 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile
         push: false
-        tags: your-django-app:latest
+        tags: backend:latest
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
