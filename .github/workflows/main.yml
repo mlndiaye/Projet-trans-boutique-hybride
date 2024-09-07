@@ -1,0 +1,52 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build and push backend Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./backend
+        file: ./backend/Dockerfile
+        push: false
+        tags: myregistry.azurecr.io/backend:${{ github.sha }}
+        secrets: |
+          GH_USER=${{ secrets.GH_USER }}
+          GH_TOKEN=${{ secrets.GH_TOKEN }}
+
+    - name: Build and push frontend Docker image  
+      uses: docker/build-push-action@v2
+      with:
+        context: ./frontend
+        file: ./frontend/Dockerfile
+        push: false
+        tags: myregistry.azurecr.io/frontend:${{ github.sha }}
+        secrets: |
+          GH_USER=${{ secrets.GH_USER }}
+          GH_TOKEN=${{ secrets.GH_TOKEN }}
+
+    - name: Deploy to staging
+      env:
+        BACKEND_IMAGE: myregistry.azurecr.io/backend:${{ github.sha }}
+        FRONTEND_IMAGE: myregistry.azurecr.io/frontend:${{ github.sha }}
+        STAGING_HOST: ${{ secrets.STAGING_HOST }}
+        STAGING_USER: ${{ secrets.STAGING_USER }}
+        STAGING_PASS: ${{ secrets.STAGING_PASS }}
+      run: |
+        # Connectez-vous à votre serveur de staging
+        ssh $STAGING_USER@$STAGING_HOST << EOF
+        # Tirez les nouvelles images Docker
+        docker pull $BACKEND_IMAGE
+        docker pull $FRONTEND_IMAGE
+        # Mettez à jour vos conteneurs en production
+        docker-compose up -d
+        EOF

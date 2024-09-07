@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+
 
 
 class CustomUserManager(BaseUserManager):
@@ -28,7 +29,8 @@ class CustomUserManager(BaseUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
     
-class UserModel(AbstractBaseUser):
+
+class UserModel(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
@@ -58,12 +60,6 @@ class UserModel(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return self.is_superuser
-
-    def has_module_perms(self, app_label):
-        return self.is_superuser
-
     @classmethod
     def add_user(cls, **kwargs):
         return cls.objects.create(**kwargs)
@@ -72,3 +68,6 @@ class UserModel(AbstractBaseUser):
     def remove_user(cls, email):
         user = cls.objects.get(email=email)
         user.delete()
+
+
+

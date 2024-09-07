@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-ak*v9_&jxa#88*vr@z24p##)_5kdgs@a02u&s-n$k-1@5v69zo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1', 'mlndiaye.pythonanywhere.com']
 
@@ -178,7 +178,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "PolytechShop",
 
     "show_ui_builder": True,
-    "search_model": "auth.User",  # Indique le modèle à rechercher (ici, le modèle User)
+    "search_model": AUTH_USER_MODEL,  # Indique le modèle à rechercher (ici, le modèle User)
     "search_url": "/admin/auth/user/",  # URL où se trouve la recherche
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
