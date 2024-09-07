@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-ak*v9_&jxa#88*vr@z24p##)_5kdgs@a02u&s-n$k-1@5v69zo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1', 'mlndiaye.pythonanywhere.com']
 
 # Application definition
 
@@ -128,6 +128,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
