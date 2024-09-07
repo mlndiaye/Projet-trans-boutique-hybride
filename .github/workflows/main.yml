@@ -26,11 +26,12 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '18'
+
     - name: Build Angular app
       working-directory: ./frontend
       run: |
         npm install
-        npm run build -- --prod
+        npm run build --prod
 
     - name: Deploy to PythonAnywhere
       env:
