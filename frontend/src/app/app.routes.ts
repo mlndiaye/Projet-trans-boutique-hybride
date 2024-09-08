@@ -3,7 +3,7 @@ import { InscriptionComponent } from './features/authentication/inscription/comp
 import { ConnexionComponent } from './features/authentication/connexion/components/connexion/connexion.component';
 
 export const routes: Routes = [
-    {path: "inscription", component: InscriptionComponent},
-    {path: "connexion", component: ConnexionComponent}
-
+    { path: "inscription", component: InscriptionComponent },
+    { path: "connexion", component: ConnexionComponent },
+    { path: '**', redirectTo: 'inscription' }  // Redirection pour toutes les autres URL non spécifiées
 ];
