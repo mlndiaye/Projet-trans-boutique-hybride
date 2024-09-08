@@ -22,15 +22,11 @@ export class UserService {
 
   constructor() { }
 
-  /* getUserProfile(): Observable<any> {
-    const token = this.authService.getAccessToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.httpClient.get<any>(`${this.baseUrl}/profile`, { headers })
-  } */
+  getUserProfile(): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/profile`)
+  }
  
-    getUserProfile(): Observable<any> {
+   /*  getUserProfile(): Observable<any> {
       return this.makeRequestWithToken();
     }
   
@@ -62,9 +58,8 @@ export class UserService {
         })
       );
     }
-
+ */
     updateProfile(data: any): Observable<any> {
-      const headers = this.authService.getAuthHeaders();
-      return this.httpClient.put(`${this.baseUrl}/update-profile/`, data, { headers });
+      return this.httpClient.put(`${this.baseUrl}/update-profile/`, data);
     }
 }
