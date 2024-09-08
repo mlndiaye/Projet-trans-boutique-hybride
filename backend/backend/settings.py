@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # Dossier où Django recherchera les fichiers statiques
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
-STATIC_ROOT = '/home/mlndiaye/Projet-trans-boutique-hybride/backend/static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 MEDIA_URL = '/media/'
