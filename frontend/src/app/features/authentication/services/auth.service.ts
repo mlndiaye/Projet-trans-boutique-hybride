@@ -29,16 +29,9 @@ export class AuthService {
   }
 
   changePassword(passwordData: { current_password: string, new_password: string }): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.httpClient.post<any>(`${this.baseUrl}/change-password/`, passwordData, { headers });
+    return this.httpClient.post<any>(`${this.baseUrl}/change-password/`, passwordData);
   }
 
-  getAuthHeaders(): HttpHeaders {
-    const token = this.getAccessToken();
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
 
   logout() {
     localStorage.removeItem('authUser');
