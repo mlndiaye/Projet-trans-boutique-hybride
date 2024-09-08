@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.urls import path, include, include
 from rest_framework.routers import DefaultRouter
 from products.views import ProductViewSet, CategoryViewSet
+from django.views.generic import TemplateView
+
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
@@ -15,5 +17,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('api/', include(router.urls)),
-    path('', include('products.urls')),
+    path('products/', include('products.urls')),
+    path('', TemplateView.as_view(template_name='index.html')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
