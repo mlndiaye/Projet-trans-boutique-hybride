@@ -1,0 +1,110 @@
+<nav aria-label="breadcrumb" class="container-fluid py-0 bottom-nav mb-5">
+    <div class="container d-flex align-items-center justify-content-between">
+        <ol class="breadcrumb py-3 my-0 ">
+            <li class="breadcrumb-item ">
+                <a routerLink="/" class="text-decoration-none" style="color: inherit">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.875 16.2498V12.4998C11.875 12.334 11.8092 12.1751 11.6919 12.0579C11.5747 11.9406 11.4158 11.8748 11.25 11.8748H8.75C8.58424 11.8748 8.42527 11.9406 8.30806 12.0579C8.19085 12.1751 8.125 12.334 8.125 12.4998V16.2498C8.125 16.4156 8.05915 16.5745 7.94194 16.6917C7.82473 16.809 7.66576 16.8748 7.5 16.8748H3.75C3.58424 16.8748 3.42527 16.809 3.30806 16.6917C3.19085 16.5745 3.125 16.4156 3.125 16.2498V9.02324C3.1264 8.93674 3.14509 8.8514 3.17998 8.77224C3.21486 8.69308 3.26523 8.6217 3.32812 8.5623L9.57812 2.88261C9.69334 2.77721 9.84384 2.71875 10 2.71875C10.1562 2.71875 10.3067 2.77721 10.4219 2.88261L16.6719 8.5623C16.7348 8.6217 16.7851 8.69308 16.82 8.77224C16.8549 8.8514 16.8736 8.93674 16.875 9.02324V16.2498C16.875 16.4156 16.8092 16.5745 16.6919 16.6917C16.5747 16.809 16.4158 16.8748 16.25 16.8748H12.5C12.3342 16.8748 12.1753 16.809 12.0581 16.6917C11.9408 16.5745 11.875 16.4156 11.875 16.2498Z" stroke="#5F6C72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Accueil
+                </a>
+            </li>
+            <li class="breadcrumb-item active text-dark" aria-current="page">Mon profil</li>
+        </ol>
+        <span>Bienvenue! <span style="color: #f40e0e">{{user?.first_name}}</span></span>
+    </div>
+</nav>   
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-5 mb-md-0">
+                <div>
+                    <h6>Gérer mon compte</h6>
+                    <ul>
+                        <li class="list-unstyled"><a class="text-decoration-none text-secondary" href="#">Mon profil</a></li>
+                        <li class="list-unstyled"><a class="text-decoration-none text-secondary" href="#">Carnet d'adresses</a></li>
+                        <li class="list-unstyled"><a class="text-decoration-none text-secondary" href="#">Mes options de paiement</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Mes commandes</h6>
+                    <ul>
+                        <li class="list-unstyled"><a class="text-decoration-none text-secondary" href="#">Mes retours</a></li>
+                        <li class="list-unstyled"><a class="text-decoration-none text-secondary" href="#">Mes annulations</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6><a class="text-decoration-none text-dark" href="">Ma liste de souhaits</a></h6>
+                </div>
+            </div>
+            <div class="container col-md-8">
+                <div class="">
+                    <h5 style="color: rgb(244, 14, 14);">Mon profil</h5>
+                    <form [formGroup]="profileForm" class="row mb-3 px-0 mx-0">
+                        <div class="col-md-5 px-0 mb-md-3">
+                            <label for="first-name">Prénoms</label>
+                            <input type="text" class="form-control-1 w-100" id="first-name" formControlName="first_name" [placeholder]="user?.first_name">
+                            <div *ngIf="profileSubmitted && profileForm.get('first_name')?.invalid">
+                                <small class="text-danger" *ngIf="profileForm.get('first_name')?.errors?.['required']">Le prénom est requis.</small>
+                            </div>
+                        </div>
+                        <div class="d-none d-md-block col-md-2"></div>
+                        <div class="col-md-5 px-0 mb-md-3">
+                            <label for="last-name">Nom de famille</label>
+                            <input type="text" class="form-control-1 w-100" id="last-name" formControlName="last_name" [placeholder]="user?.last_name">
+                            <div *ngIf="profileSubmitted && profileForm.get('last_name')?.invalid">
+                                <small class="text-danger" *ngIf="profileForm.get('last_name')?.errors?.['required']">Le nom est requis.</small>
+                            </div>
+                        </div>
+                        <div class="col-md-5 px-0">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control-1 w-100" id="email" formControlName="email" [placeholder]="user?.email">
+                            <div *ngIf="profileSubmitted && profileForm.get('email')?.invalid">
+                                <small class="text-danger" *ngIf="profileForm.get('email')?.errors?.['required']">L'email est requis.</small>
+                                <small class="text-danger" *ngIf="profileForm.get('email')?.errors?.['email']">Entrez une adresse email valide.</small>
+                            </div>
+                        </div>
+                        <div class="d-none d-md-block col-md-2"></div>
+                        <div class="col-md-5 px-0">
+                            <label for="address">Adresse</label>
+                            <input type="text" class="form-control-1 w-100" id="address" formControlName="address" [placeholder]="user?.address">
+                            <div *ngIf="profileSubmitted && profileForm.get('address')?.invalid">
+                                <small class="text-danger" *ngIf="profileForm.get('address')?.errors?.['required']">L'adresse est requise.</small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-auto ms-auto mt-3" (click)="changeProfil()">Sauvegarder les modifications</button>
+                    </form>
+                    <form [formGroup]="passwordForm" class="">
+                        <label class="fw-bold mb-1 fs-5">Modification du mot de passe</label>
+                        <div class="mb-3">
+                            <input type="password" class="form-control-1 w-100" id="current_password" formControlName="current_password" placeholder="Mot de passe actuel">
+                            <div *ngIf="passwordSubmitted && passwordForm.get('current_password')?.invalid">
+                                <small class="text-danger" *ngIf="passwordForm.get('current_password')?.errors?.['required']">Le mot de passe est requis.</small>
+                                <small class="error text-danger" *ngIf="passwordForm.get('current_password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères.</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control-1 w-100" id="new_password" formControlName="new_password" placeholder="Nouveau mot de passe">
+                            <div *ngIf="passwordSubmitted && passwordForm.get('new_password')?.invalid">
+                                <small class="text-danger" *ngIf="passwordForm.get('new_password')?.errors?.['required']">Le nouveau mot de passe est requis.</small>
+                                <small class="error text-danger" *ngIf="passwordForm.get('new_password')?.errors?.['minlength']">Le nouveau mot de passe doit contenir au moins 8 caractères.</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control-1 w-100" id="confirm_new_password" formControlName="confirm_new_password" placeholder="Confirmer nouveau mot de passe">
+                            <div *ngIf="passwordSubmitted && passwordForm.get('confirm_new_password')?.invalid">
+                                <small class="text-danger" *ngIf="passwordForm.get('confirm_new_password')?.errors?.['required']">La confirmation du nouveau mot de passe est requise.</small>
+                                <small class="error text-danger" *ngIf="passwordForm.get('confirm_new_password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères.</small>
+                            </div>
+                            <div *ngIf="passwordSubmitted && passwordForm.errors?.['passwordMismatch']">
+                            <small class="text-danger">Les mots de passe ne correspondent pas</small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger  float-end" (click)="changePassword()">Changer le mot de passe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
