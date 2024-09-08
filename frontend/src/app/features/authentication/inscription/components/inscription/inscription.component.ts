@@ -6,12 +6,12 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 // Validateur personnalisé pour vérifier si les mots de passe correspondent
-export function passwordMatchValidator(): ValidatorFn {
+export function passwordMatchValidator(password1: string, password2: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirm_password');
+    const passwordValue1 = control.get(password1);
+    const passwordValue2 = control.get(password2);
 
-    return password && confirmPassword && password.value !== confirmPassword.value
+    return passwordValue1 && passwordValue2 && passwordValue1.value !== passwordValue2.value
       ? { passwordMismatch: true }
       : null;
   };
@@ -36,7 +36,7 @@ export class InscriptionComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirm_password: ['', [Validators.required, Validators.minLength(8)]]},
-      {validator: passwordMatchValidator()}
+      {validator: passwordMatchValidator('password', 'confirm_password')}
     );
   }
 

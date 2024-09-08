@@ -49,8 +49,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ['email', 'first_name', 'last_name', 'phone_number', 
-                    'address', 'city', 'country', 'zip_code', 'profile_photo']
+        fields = ['email', 'first_name', 'last_name', 'address']
         
 class AdminUserSerializer(serializers.ModelSerializer):
     """
@@ -60,3 +59,8 @@ class AdminUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = '__all__'  # Affiche tous les champs du modèle
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
