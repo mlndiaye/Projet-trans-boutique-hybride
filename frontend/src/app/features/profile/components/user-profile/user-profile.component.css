@@ -1,0 +1,10 @@
+.form-control-1{
+    border: none;
+    background-color: rgb(245, 245, 245);
+}
+input:focus{
+    outline: none;
+}
+body{
+    font-size: medium;
+}
