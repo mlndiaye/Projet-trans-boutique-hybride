@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -26,19 +29,22 @@ jobs:
     - name: Build Angular project
       run: |
         cd frontend
-        npm run build --output-path=docs --base-href="/Projet-trans-boutique-hybride/"
+        ng build --output-path=docs --base-href="/Projet-trans-boutique-hybride/"
 
-    - name: Verify build directory
+    - name: List contents of docs directory
       run: |
         cd frontend
         ls -la docs
 
     - name: Install angular-cli-ghpages
-      run: npm install -g angular-cli-ghpages
+      run: |
+        cd frontend
+        npm install angular-cli-ghpages --save-dev
 
     - name: Deploy to GitHub Pages
       run: |
-        npx angular-cli-ghpages --dir=docs --no-silent
+        cd frontend
+        npx angular-cli-ghpages --dir=./docs --no-silent
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
