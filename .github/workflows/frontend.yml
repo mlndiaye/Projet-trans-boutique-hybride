@@ -38,7 +38,7 @@ jobs:
 
     - name: Deploy to GitHub Pages
       run: |
-        npx angular-cli-ghpages --dir=frontend/docs --no-silent
+        npx angular-cli-ghpages --dir=docs --no-silent
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
