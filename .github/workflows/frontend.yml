@@ -1,4 +1,3 @@
-
 name: Deploy Angular to GitHub Pages
 
 on:
@@ -6,6 +5,8 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -20,15 +21,16 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install dependencies
+    - name: Install dependencies and Angular CLI
       run: |
         cd frontend
         npm install
+        npm install @angular/cli
 
     - name: Build Angular project
       run: |
         cd frontend
-        ng build --output-path=docs --base-href="/Projet-trans-boutique-hybride/"
+        npx ng build --output-path=docs --base-href="/Projet-trans-boutique-hybride/"
 
     - name: List contents of docs directory
       run: |
@@ -50,4 +52,4 @@ jobs:
     - name: Clean up dependencies (optional)
       run: |
         cd frontend
-        rm -rf node_module
+        rm -rf node_modules
