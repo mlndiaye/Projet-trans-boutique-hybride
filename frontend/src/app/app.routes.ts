@@ -7,5 +7,5 @@ export const routes: Routes = [
     {path: "inscription", component: InscriptionComponent},
     {path: "connexion", component: ConnexionComponent},
     {path: 'profil', component: UserProfileComponent},
-    { path: '**', redirectTo: 'inscription' }  // Redirection pour toutes les autres URL non spécifiées
+    { path: '**', redirectTo: 'inscription' }
 ];
