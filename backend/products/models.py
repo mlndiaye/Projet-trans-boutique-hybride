@@ -27,6 +27,9 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     qr_code = models.ImageField(upload_to='products/qr_codes/', blank=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    views_count = models.IntegerField(default=0)
+    sales_count = models.IntegerField(default=0)
+    last_sale_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name_product

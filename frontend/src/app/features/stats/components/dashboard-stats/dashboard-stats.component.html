@@ -1,0 +1,57 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <!-- En-tête avec KPIs -->
+  <div class="stats-grid" *ngIf="stats">
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3>Total Produits</h3>
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ stats.global_stats.total_products }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3>Ventes Totales</h3>
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{stats.global_stats.total_sales}}</span>
+      </div>
+    </div>
+
+    <div class="stat-card warning" *ngIf="stats.global_stats.low_stock_products > 0">
+      <div class="stat-header">
+        <h3>Stock Faible</h3>
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{stats.global_stats.low_stock_products}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Évolution des Ventes</h3>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>Ventes par Catégorie</h3>
+      <canvas id="categoryChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Alerte stock faible -->
+  <div *ngIf="stats && stats.global_stats">
+    <div class="alert warning" *ngIf="stats.global_stats.low_stock_products > 0">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Attention: {{ stats.global_stats.low_stock_products }} produits nécessitent un réapprovisionnement.</span>
+    </div>
+</div>
+
+</div>
