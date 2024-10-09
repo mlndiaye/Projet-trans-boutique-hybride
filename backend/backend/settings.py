@@ -178,10 +178,25 @@ JAZZMIN_SETTINGS = {
     "search_model": AUTH_USER_MODEL,  # Indique le modèle à rechercher (ici, le modèle User)
     "search_url": "/admin/auth/user/",  # URL où se trouve la recherche
     "topmenu_links": [
-        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Home", 
+         "url": "admin:index", 
+         "permissions": ["auth.view_user"]},
         {"model": "auth.User"},  # Ajoute un lien direct vers la recherche utilisateur
-        {"app": "products"}
-
+        {"app": "products"},
+        # Nouveau lien vers le dashboard
+        {
+            "name": "📊 Dashboard Stats", 
+            "url": "http://localhost:4200/#/dashboard-stats",
+            "permissions": ["auth.view_user"],
+            "new_window": True  # Ouvre dans un nouvel onglet
+        }
     ],
 
+    # Configuration des icônes
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "products.product": "fas fa-shopping-cart",
+        "products.category": "fas fa-tags",
+    },
 }
