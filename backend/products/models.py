@@ -23,6 +23,7 @@ class Product(models.Model):
     description = models.TextField()
     price_product = models.DecimalField(max_digits=17, decimal_places=2)
     stock = models.IntegerField()
+    minimum_stock = models.IntegerField(default=0)  # Ajouter le champ minimum_stock
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     qr_code = models.ImageField(upload_to='products/qr_codes/', blank=True)

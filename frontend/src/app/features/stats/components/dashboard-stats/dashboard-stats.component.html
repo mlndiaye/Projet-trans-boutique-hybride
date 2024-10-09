@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="stat-card warning" *ngIf="stats.global_stats.low_stock_products > 0">
+    <div class="stat-card warning" *ngIf="stats.global_stats.low_stock_products > 0"  (click)="showLowStockProducts()">
       <div class="stat-header">
         <h3>Stock Faible</h3>
         <i class="fas fa-exclamation-triangle"></i>
@@ -32,6 +32,37 @@
       </div>
     </div>
   </div>
+
+    <!-- Modal pour les produits en stock faible -->
+    <dialog [open]="isLowStockModalOpen" class="low-stock-modal">
+      <div class="modal-header">
+        <h2>Produits en Stock Faible</h2>
+        <button class="close-button" (click)="closeLowStockModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-content">
+        <table class="low-stock-table">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Catégorie</th>
+              <th>Stock Actuel</th>
+              <th>Stock Minimum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of lowStockProducts" [class.critical-stock]="product.stock < product.minimum_stock">
+              <td>{{product.name_product}}</td>
+              <td>{{product.category.name_category}}</td>
+              <td>{{product.stock}}</td>
+              <td>{{product.minimum_stock}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </dialog>
 
   <!-- Graphiques -->
   <div class="charts-grid">

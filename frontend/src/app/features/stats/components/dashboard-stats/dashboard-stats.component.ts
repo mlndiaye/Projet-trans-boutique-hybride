@@ -1,26 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { DashboardStatsService } from '../../services/dashboard-stats.service';
+import { DashboardStats, DashboardStatsService, LowStockProduct } from '../../services/dashboard-stats.service';
 import { CommonModule } from '@angular/common';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { AuthService } from '../../../authentication/services/auth.service';
+import { Router } from '@angular/router';
+
 
 // Enregistrer tous les éléments nécessaires de Chart.js
 Chart.register(...registerables);
-
-interface DashboardStats {
-  global_stats: {
-    total_products: number;
-    total_sales: number;
-    low_stock_products: number;
-  };
-  sales_by_category: Array<{
-    name_category: string;
-    total_sales: number;
-  }>;
-  monthly_sales: Array<{
-    month: string;
-    sales: number;
-  }>;
-}
 
 @Component({
   selector: 'app-dashboard',
@@ -29,12 +17,19 @@ interface DashboardStats {
   standalone: true,
   imports: [CommonModule]
 })
+
 export class DashboardStatsComponent implements OnInit {
   stats: DashboardStats | null = null;
   monthlyChart: Chart | undefined;
   categoryChart: Chart | undefined;
+  lowStockProducts: LowStockProduct[] = [];
+  isLowStockModalOpen = false;
 
-  constructor(private dashboardService: DashboardStatsService) {}
+  constructor(private dashboardService: DashboardStatsService,
+    private dialog: Dialog,
+    private authServive: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadDashboardData();
@@ -45,8 +40,25 @@ export class DashboardStatsComponent implements OnInit {
       (data: DashboardStats) => {
         this.stats = data;
         this.initializeCharts();
+      },
+      error => {
+        console.error('Erreur lors du chargement des données du tableau de bord:', error);
+        // Afficher un message d'erreur à l'utilisateur, si nécessaire
       }
     );
+  }
+
+  showLowStockProducts() {
+    this.dashboardService.getLowStockProducts().subscribe(
+      (products: LowStockProduct[]) => {
+        this.lowStockProducts = products;
+        this.isLowStockModalOpen = true;
+      }
+    );
+  }
+
+  closeLowStockModal() {
+    this.isLowStockModalOpen = false;
   }
 
   private initializeCharts() {

@@ -1,11 +1,14 @@
 # views.py
 from django.db.models import Sum
 from rest_framework import viewsets
-from .serializers import ProductSerializer, CategorySerializer
+from rest_framework.views import APIView
+from .serializers import ProductSerializer, CategorySerializer, LowStockProductSerializer
 from .models import Product, Category
 from django.db.models.functions import TruncMonth
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import F
+
 
 
 
@@ -46,3 +49,9 @@ def get_dashboard_stats(request):
         'sales_by_category': list(sales_by_category),
         'monthly_sales': list(monthly_sales)
     })
+
+class LowStockProductsView(APIView):
+    def get(self, request):
+        low_stock_products = Product.objects.filter(stock__lt=F('minimum_stock'))
+        serializer = LowStockProductSerializer(low_stock_products, many=True)
+        return Response(serializer.data)

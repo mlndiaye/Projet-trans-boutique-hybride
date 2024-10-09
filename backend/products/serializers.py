@@ -32,3 +32,12 @@ class ProductSerializer(serializers.ModelSerializer):
         for image_data in images_data.getlist('images'):
             Image.objects.create(produit=produit, src_img=image_data)
         return produit
+    
+
+    
+
+class LowStockProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id_product', 'name_product', 'stock', 'minimum_stock', 'category']
+        depth = 1 
