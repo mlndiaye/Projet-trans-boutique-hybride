@@ -5,10 +5,30 @@ import { UserProfileComponent } from './features/profile/components/user-profile
 import { DashboardStatsComponent } from './features/stats/components/dashboard-stats/dashboard-stats.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'inscription', pathMatch: 'full' },
-    { path: 'inscription', component: InscriptionComponent },
-    { path: 'connexion', component: ConnexionComponent },
-    { path: 'dashboard-stats', component: DashboardStatsComponent },
-    { path: 'profil', component: UserProfileComponent },
-    { path: '**', redirectTo: 'inscription' }
+    { 
+        path: '', 
+        redirectTo: 'inscription', 
+        pathMatch: 'full' 
+    },
+    { 
+        path: 'inscription', 
+        component: InscriptionComponent 
+    },
+    { 
+        path: 'connexion', 
+        component: ConnexionComponent 
+    },
+    { 
+        path: 'dashboard-stats', 
+        component: DashboardStatsComponent,
+        // canActivate: [AdminGuard],
+    },
+    { 
+        path: 'profil', 
+        component: UserProfileComponent 
+    },
+    { 
+        path: '**', 
+        redirectTo: 'inscription' 
+    }
 ];

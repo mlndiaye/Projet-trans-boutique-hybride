@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
+import { jwtDecode } from "jwt-decode"
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +15,52 @@ export class AuthService {
   private authStatusSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
   authStatus$: Observable<boolean> = this.authStatusSubject.asObservable();
   
-  constructor() { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) { 
+    
+  }
 
+
+  public checkAdminTokenFromUrl() {
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      if (token) {
+        try {
+          const decodedToken: any = jwtDecode(token);
+          
+          // Vérifier si le token est valide et provient d'un admin
+          if (decodedToken.exp * 1000 > Date.now() && decodedToken.is_staff) {
+            // Créer un objet authUser compatible avec votre structure existante
+            const authUser = {
+              access: token,
+              refresh: token,
+              user: {
+                id: decodedToken.user_id,
+                email: decodedToken.email,
+                is_staff: decodedToken.is_staff
+              }
+            };
+
+            // Stocker dans le localStorage comme pour un login normal
+            localStorage.setItem('authUser', JSON.stringify(authUser));
+            this.authStatusSubject.next(true);
+
+            // Nettoyer l'URL
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {},
+              replaceUrl: true
+            });
+          }
+        } catch (error) {
+          console.error('Token admin invalide', error);
+          this.router.navigate(['/unauthorized']);
+        }
+      }
+    });
+  }
 
   signup(data: any) {
     return this.httpClient.post(`${this.baseUrl}/inscription/`, data);
@@ -40,6 +86,16 @@ export class AuthService {
 
   isLoggedIn() {
     return localStorage.getItem('authUser') !== null;
+  }
+
+  isAdmin(): boolean {
+    const authUser = this.getCurrentUser();
+    return authUser?.user?.is_staff === true;
+  }
+
+  getCurrentUser() {
+    const authUser = localStorage.getItem('authUser');
+    return authUser ? JSON.parse(authUser) : null;
   }
 
   getAccessToken() {

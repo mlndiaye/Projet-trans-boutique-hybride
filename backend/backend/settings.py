@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'products',
+    'categories',
     'users',
 
 ]
@@ -168,6 +169,12 @@ CORS_ALLOW_METHODS = (
     'OPTIONS'
 )
 BASE_URL = 'https://mlndiaye.pythonanywhere.com'
+
+
+
+ANGULAR_DASHBOARD_URL = "http://localhost:4200/#/dashboard-stats"
+
+
 JAZZMIN_SETTINGS = {
     "site_title": "Page Admin",
     "site_header": "hybride p-Shop",
@@ -186,9 +193,9 @@ JAZZMIN_SETTINGS = {
         # Nouveau lien vers le dashboard
         {
             "name": "📊 Dashboard Stats", 
-            "url": "http://localhost:4200/#/dashboard-stats",
+            "url": 'http://localhost:8000/auth/admin/redirect-to-dashboard/',
             "permissions": ["auth.view_user"],
-            "new_window": True  # Ouvre dans un nouvel onglet
+            "new_window": True
         }
     ],
 
@@ -200,3 +207,5 @@ JAZZMIN_SETTINGS = {
         "products.category": "fas fa-tags",
     },
 }
+
+

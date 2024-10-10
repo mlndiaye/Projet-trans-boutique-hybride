@@ -1,9 +1,14 @@
 from django.urls import path
-from .views import product_detail, product_qr_code
+from .api import *
+
 
 
 urlpatterns = [
-    path('<int:product_id>/', product_detail, name='product_detail'),
-    path('<int:product_id>/qr-code/', product_qr_code, name='product_qr_code'),
+
+    path('', ProductAPIView.as_view()),  # Pour la liste des produits
+    path('<int:pk>/', ProductAPIView.as_view()),  # Pour un produit spécifique
+    path('dashboard/stats/', get_dashboard_stats, name='dashboard-stats'),
+    path('dashboard/low-stock-products/', LowStockProductsView.as_view(), name='low_stock_products'),
+    path('dashboard/sales', SalesDetailsView.as_view(), name='sales-details'),
 
 ]

@@ -8,6 +8,13 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from django.contrib.auth import update_session_auth_hash
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.middleware.csrf import get_token
+import jwt
+from datetime import datetime, timedelta
 
 
 class RegisterView(generics.CreateAPIView):
@@ -96,3 +103,25 @@ class UpdateUserProfileView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+
+@staff_member_required
+def admin_redirect_to_dashboard(request):
+    # Créer un JWT token avec les infos nécessaires
+    payload = {
+        'user_id': request.user.id,
+        'email': request.user.email,
+        'is_staff': True,
+        'exp': datetime.utcnow() + timedelta(hours=1)  # Token valide pour 1h
+    }
+    
+    token = jwt.encode(
+        payload,
+        settings.SECRET_KEY,
+        algorithm='HS256'
+    )
+    
+    # L'URL de votre app Angular avec le token
+    angular_url = f"{settings.ANGULAR_DASHBOARD_URL}?token={token}"
+    
+    return HttpResponseRedirect(angular_url)
