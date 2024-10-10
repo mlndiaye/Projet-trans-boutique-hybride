@@ -5,9 +5,15 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 from PIL import Image
-
+from users.models import UserModel
 
 from django.conf import settings
+
+STATUS_CHOICE = (
+    ("process", "Processing"),
+    ("shipped", "Shipped"),
+    ("delivered", "Delivered")
+)
 
 class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
@@ -53,3 +59,23 @@ class Image(models.Model):
     id_img = models.AutoField(primary_key=True)
     src_img = models.ImageField(upload_to='products/')
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+
+class CartOrder(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="orders")
+    price = models.DecimalField(max_digits=9999999999999, decimal_places=2, default="1.99")
+    paid_status = models.BooleanField(default=False)
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing")
+
+    class Meta:
+        verbose_name_plural = "Cart Order"
+
+class CartOrderItem(models.Model):
+    order = models.ForeignKey(CartOrder, on_delete=models.CASCADE, related_name="items")
+    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    qty = models.IntegerField(default=0)
+    total = models.DecimalField(max_digits=9999999999999, decimal_places=2, default="1.99")
+
+    class Meta:
+        verbose_name_plural = "Cart Order Item"
+

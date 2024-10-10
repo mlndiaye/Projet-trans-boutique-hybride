@@ -1,0 +1,99 @@
+<nav aria-label="breadcrumb" class="container-fluid py-0 bottom-nav">
+    <div class="container">
+        <ol class="breadcrumb py-3 my-0">
+            <li class="breadcrumb-item">
+                <a routerLink="/"  class="text-decoration-none text-secondary">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.875 16.2498V12.4998C11.875 12.334 11.8092 12.1751 11.6919 12.0579C11.5747 11.9406 11.4158 11.8748 11.25 11.8748H8.75C8.58424 11.8748 8.42527 11.9406 8.30806 12.0579C8.19085 12.1751 8.125 12.334 8.125 12.4998V16.2498C8.125 16.4156 8.05915 16.5745 7.94194 16.6917C7.82473 16.809 7.66576 16.8748 7.5 16.8748H3.75C3.58424 16.8748 3.42527 16.809 3.30806 16.6917C3.19085 16.5745 3.125 16.4156 3.125 16.2498V9.02324C3.1264 8.93674 3.14509 8.8514 3.17998 8.77224C3.21486 8.69308 3.26523 8.6217 3.32812 8.5623L9.57812 2.88261C9.69334 2.77721 9.84384 2.71875 10 2.71875C10.1562 2.71875 10.3067 2.77721 10.4219 2.88261L16.6719 8.5623C16.7348 8.6217 16.7851 8.69308 16.82 8.77224C16.8549 8.8514 16.8736 8.93674 16.875 9.02324V16.2498C16.875 16.4156 16.8092 16.5745 16.6919 16.6917C16.5747 16.809 16.4158 16.8748 16.25 16.8748H12.5C12.3342 16.8748 12.1753 16.809 12.0581 16.6917C11.9408 16.5745 11.875 16.4156 11.875 16.2498Z" stroke="#5F6C72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>  
+                    Maison
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" style="color: black">Panier</li>
+        </ol>
+    </div>
+</nav>
+
+<ng-template #emptyCartBlock>
+    <div class="d-flex flex-column align-items-center my-5 ">
+        <div class=" d-inline-block mt-5">
+            <button class="btn border rounded-circle" >
+                <svg style="color: #ee5858;" width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.25 20.25C8.25 20.6642 7.91421 21 7.5 21C7.08579 21 6.75 20.6642 6.75 20.25C6.75 19.8358 7.08579 19.5 7.5 19.5C7.91421 19.5 8.25 19.8358 8.25 20.25Z" fill="#191C1F" stroke="#191C1F" stroke-width="1.5"/>
+                    <path d="M17.25 21.75C18.0784 21.75 18.75 21.0784 18.75 20.25C18.75 19.4216 18.0784 18.75 17.25 18.75C16.4216 18.75 15.75 19.4216 15.75 20.25C15.75 21.0784 16.4216 21.75 17.25 21.75Z" fill="#191C1F"/>
+                    <path d="M3.96562 6.75H20.7844L18.3094 15.4125C18.2211 15.7269 18.032 16.0036 17.7711 16.2C17.5103 16.3965 17.1922 16.5019 16.8656 16.5H7.88437C7.55783 16.5019 7.2397 16.3965 6.97886 16.2C6.71803 16.0036 6.52893 15.7269 6.44062 15.4125L3.04688 3.54375C3.00203 3.38696 2.9073 3.24905 2.77704 3.15093C2.64677 3.05282 2.48808 2.99983 2.325 3H0.75" stroke="#191C1F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg> 
+            </button>
+        </div>
+        <p>Votre panier est vide</p>
+        <p>Parcourez nos catégories et découvrez nos meilleures offres!</p>
+        <a routerLink="/" class="btn d-inline-block text-white mb-4" style="background-color: rgb(250, 130, 50);">COMMENCEZ VOS ACHATS</a>
+    </div>
+</ng-template>
+
+<div *ngIf="1;else emptyCartBlock" class="container cart d-flex align-items-start my-5 flex-wrap " id="" style="font-size:x-small ;">
+    <table class="border me-5" style="border-collapse: separate;border-spacing: 2rem;">
+        <tr class="" style="font-size: small;">
+            <td class="py-1 border">Produit</td>
+            <td class="py-1 border">Prix</td>
+            <td class=" py-1 border">Quantite</td>
+            <td class=" py-1 border text-center">Total</td>
+        </tr>
+        
+        <tr *ngFor="let i of [1,2]" class="fw-medium border">
+            <td class="d-flex align-items-center position-relative">
+                <button class="fa-regular fa-circle-xmark delete-item border fa-regular fa-circle-xmark px-0 py-0 fa-sm position-absolute top-0 start-0 " style="color: #ee5858;"></button>
+                <div class=" d-flex align-items-center">
+                    <img src="assets/img/manette.jpg" width="50" height="50" alt=""   style="object-fit:contain;" class="img-fluid">
+                </div>
+            </td>
+            <td class="px-3">
+                FCFA
+            </td>
+            <td>
+                <div class="qty-detail">
+                    <input type="number" value="1" id="" min="1" class=" text-center" style="width: 40px; font-size: small;" onkeydown="return false;">
+                </div>
+            </td>
+            <td class="text-center">
+                FCFA
+            </td>
+        </tr>
+        <tr class="border border-2">
+            <td class=" d-inline-block">
+                <a routerLink="/" routerLinkActive="router-link-active"  class="btn btn-outline-dark btn-sm d-inline-block my-3 " >
+                Retour à la boutique
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+            <td class=" d-inline-block update-cart"><a class="btn btn-outline-dark my-3 btn-sm">Rafraichir carte</a></td>
+        </tr>
+    </table>
+
+    <table class="border border-2 my-5 fw-medium border px-4 d-inline-block pb-2">
+        <tr class="">
+            <td class="fw-medium fs-6 py-2">Total du panier</td>
+        </tr>
+        <tr >
+            <td class="text-secondary py-1 border-bottom">Sous total</td>
+            <td class="px-5 border-bottom"></td>
+            <td class="text-end  border-bottom"> FCFA</td>
+        </tr>
+        <tr class="">
+            <td class="text-secondary py-1 border-bottom">Expédition</td>
+            <td class="px-5 border-bottom"></td>
+            <td class="text-end border-bottom"> FCFA</td>
+        </tr>
+        <tr class=" ">
+            <td class="text-secondary py-1 ">Total</td>
+            <td class="px-5 "></td>
+            <td class=""><span class="total-cart"></span> FCFA</td>
+        </tr>
+        <tr class="d-flex justify-content-center">
+            <td><a class="btn btn-danger text-small btn-sm">Passer à la caisse</a></td>
+        </tr>
+    </table>
+</div>
+
+

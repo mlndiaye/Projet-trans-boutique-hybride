@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, include
 from rest_framework.routers import DefaultRouter
-from products.views import ProductViewSet, CategoryViewSet
+from products.views import ProductViewSet, CategoryViewSet, CreateOrderView
 from django.views.generic import TemplateView
 
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('api/', include(router.urls)),
+    path('api/create-order', CreateOrderView.as_view()),
     path('products/', include('products.urls')),
     path('', TemplateView.as_view(template_name='index.html')),
 

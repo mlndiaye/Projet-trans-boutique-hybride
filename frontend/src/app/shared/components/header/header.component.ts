@@ -3,6 +3,7 @@ import { UserService } from '../../../features/profile/services/user.service';
 import { AuthService } from '../../../features/authentication/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../../features/products/services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -11,12 +12,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
+
 export class HeaderComponent implements OnInit{
   userName: string | null = null;
   userService = inject(UserService);
   authService = inject(AuthService);
   router = inject(Router);
-  constructor() { }
+  cartItemsCount: number = 0;
+  cartService = inject(CartService);
+
+  constructor() {
+    this.cartService.cart$.subscribe(cart => {
+      this.cartItemsCount = cart.items.length;
+    });
+   }
 
   ngOnInit(): void {
     this.authService.authStatus$.subscribe(isLoggedIn => {
