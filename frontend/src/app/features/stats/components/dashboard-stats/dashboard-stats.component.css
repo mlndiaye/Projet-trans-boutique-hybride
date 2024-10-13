@@ -276,6 +276,12 @@
     }
   }
   
+  .chart-container {
+    position: relative;
+    height: 400px; /* Hauteur fixe */
+    width: 100%;
+  }
+
   .filters {
     display: flex;
     justify-content: space-between;

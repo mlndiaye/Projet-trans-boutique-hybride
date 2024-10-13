@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DashboardStats } from '../interfaces/dashboartStats';
-import { LowStockProduct } from '../interfaces/lowstock';
-import { SaleDetails } from '../interfaces/sales';
+import { DashboardStats, LowStockProduct, SaleDetails } from '../interfaces/sales';
 
 
 
@@ -15,8 +13,8 @@ export class DashboardStatsService {
 
   constructor(private http: HttpClient) {}
 
-  getDashboardStats(): Observable<DashboardStats> {
-    return this.http.get<DashboardStats>(`${this.apiUrl}/stats`);
+  getDashboardStats(period: 'day' | 'week' | 'month' = 'month'): Observable<DashboardStats> {
+    return this.http.get<DashboardStats>(`${this.apiUrl}/stats/${period}`);
   }
 
   getSalesDetails(): Observable<SaleDetails[]> {

@@ -76,7 +76,7 @@
       </table>
     </div>
   </dialog>
-
+  
   <!-- Modal pour les ventes -->
   <dialog [open]="isSalesModalOpen" class="sales-modal" id="modal2">
     <div class="modal-header">
@@ -135,9 +135,24 @@
       <div class="chart-header">
         <h3>Évolution des Ventes</h3>
         <div class="chart-actions">
-          <button class="chart-period-button">Jour</button>
-          <button class="chart-period-button">Semaine</button>
-          <button class="chart-period-button active">Mois</button>
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'day'}"
+            (click)="onPeriodChange('day')">
+            Jour
+          </button>
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'week'}"
+            (click)="onPeriodChange('week')">
+            Semaine
+          </button>
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'month'}"
+            (click)="onPeriodChange('month')">
+            Mois
+          </button>
         </div>
       </div>
       <canvas id="monthlyChart"></canvas>
@@ -147,16 +162,26 @@
       <div class="chart-header">
         <h3>Ventes par Catégorie</h3>
         <div class="chart-actions">
-          <button class="chart-type-button">
+          <button class="chart-type-button" (click)="changeCategoryChartType('pie')" [class.active]="categoryChartType === 'pie'">
             <i class="fas fa-chart-pie"></i>
           </button>
-          <button class="chart-type-button active">
+          <button class="chart-type-button"  (click)="changeCategoryChartType('bar')" [class.active]="categoryChartType === 'bar'" >
             <i class="fas fa-chart-bar"></i>
           </button>
         </div>
       </div>
-      <canvas id="categoryChart"></canvas>
+      <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+      </div>
     </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Top 5 des Produits les Plus Consultés</h3>
+      </div>
+      <canvas id="viewsChart"></canvas>
+    </div>
+
   </div>
 
   <!-- Alerte stock faible -->
