@@ -1,4 +1,3 @@
-<!-- dashboard.component.html -->
 <div class="dashboard-container">
   <!-- En-tête avec KPIs -->
   <div class="stats-grid" *ngIf="stats">
@@ -9,49 +8,188 @@
       </div>
       <div class="stat-content">
         <span class="stat-value">{{ stats.global_stats.total_products }}</span>
+        <span class="stat-label">produits</span>
       </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card hover-effect" (click)="showTotalSales()">
       <div class="stat-header">
         <h3>Ventes Totales</h3>
         <i class="fas fa-chart-line"></i>
       </div>
       <div class="stat-content">
-        <span class="stat-value">{{stats.global_stats.total_sales}}</span>
+        <span class="stat-value">{{formatToFCFA(totalSales)}}</span> <!-- Affichage du total des ventes -->
+        <span class="stat-label">de revenus</span>
       </div>
     </div>
+    
 
-    <div class="stat-card warning" *ngIf="stats.global_stats.low_stock_products > 0">
+    <div class="stat-card warning hover-effect" *ngIf="stats.global_stats.low_stock_products > 0" (click)="showLowStockProducts()">
       <div class="stat-header">
         <h3>Stock Faible</h3>
         <i class="fas fa-exclamation-triangle"></i>
       </div>
       <div class="stat-content">
         <span class="stat-value">{{stats.global_stats.low_stock_products}}</span>
+        <span class="stat-label">produits à réapprovisionner</span>
       </div>
     </div>
   </div>
 
+  <!-- Modal pour les produits en stock faible -->
+  <dialog [open]="isLowStockModalOpen" class="low-stock-modal" id="modal">
+    <div class="modal-header">
+      <h2>Produits en Stock Faible</h2>
+      <button class="close-button" (click)="closeLowStockModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-content">
+      <table class="data-table low-stock-table">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Catégorie</th>
+            <th>Stock Actuel</th>
+            <th>Stock Minimum</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of lowStockProducts" [class.critical-stock]="product.stock < product.minimum_stock">
+            <td>{{product.name_product}}</td>
+            <td>{{product.category.name_category}}</td>
+            <td>
+              <span class="stock-badge" [class.critical]="product.stock < product.minimum_stock">
+                {{product.stock}}
+              </span>
+            </td>
+            <td>{{product.minimum_stock}}</td>
+            <td>
+              <button class="action-button">
+                <i class="fas fa-plus"></i> Commander
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </dialog>
+  
+  <!-- Modal pour les ventes -->
+  <dialog [open]="isSalesModalOpen" class="sales-modal" id="modal2">
+    <div class="modal-header">
+      <h2>Détail des Ventes</h2>
+      <button class="close-button" (click)="closeSalesModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-content">
+      <div class="filters">
+        <div class="date-range">
+          <input type="date" class="date-input" [(ngModel)]="startDate">
+          <span>au</span>
+          <input type="date" class="date-input" [(ngModel)]="endDate">
+        </div>
+        <button class="filter-button" (click)="filterSales()">
+          <i class="fas fa-filter"></i> Filtrer
+        </button>
+      </div>
+
+      <table class="data-table sales-table">
+        <thead>
+          <tr>
+            <th>Date de vente</th>
+            <th>Produit</th>
+            <th>Catégorie</th>
+            <th>Quantité vendue</th>
+            <th>Prix unitaire</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of filteredSales">
+            <td>{{sale.last_sale_date | date:'dd/MM/yyyy HH:mm'}}</td>
+            <td>{{sale.product_name}}</td>
+            <td>{{sale.category_name}}</td>
+            <td>{{sale.quantity_sold}}</td>
+            <td>{{ formatToFCFA(sale.unit_price)}}</td>
+            <td class="total-column">{{formatToFCFA(sale.total_sales)}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="text-right"><strong>Total</strong></td>
+            <td class="total-column">{{formatToFCFA(getTotalFilteredSales())}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </dialog>
+
   <!-- Graphiques -->
   <div class="charts-grid">
     <div class="chart-card">
-      <h3>Évolution des Ventes</h3>
+      <div class="chart-header">
+        <h3>Évolution des Ventes</h3>
+        <div class="chart-actions">
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'day'}"
+            (click)="onPeriodChange('day')">
+            Jour
+          </button>
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'week'}"
+            (click)="onPeriodChange('week')">
+            Semaine
+          </button>
+          <button 
+            class="chart-period-button" 
+            [ngClass]="{'active': currentPeriod === 'month'}"
+            (click)="onPeriodChange('month')">
+            Mois
+          </button>
+        </div>
+      </div>
       <canvas id="monthlyChart"></canvas>
     </div>
 
     <div class="chart-card">
-      <h3>Ventes par Catégorie</h3>
-      <canvas id="categoryChart"></canvas>
+      <div class="chart-header">
+        <h3>Ventes par Catégorie</h3>
+        <div class="chart-actions">
+          <button class="chart-type-button" (click)="changeCategoryChartType('pie')" [class.active]="categoryChartType === 'pie'">
+            <i class="fas fa-chart-pie"></i>
+          </button>
+          <button class="chart-type-button"  (click)="changeCategoryChartType('bar')" [class.active]="categoryChartType === 'bar'" >
+            <i class="fas fa-chart-bar"></i>
+          </button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+      </div>
     </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Top 5 des Produits les Plus Consultés</h3>
+      </div>
+      <canvas id="viewsChart"></canvas>
+    </div>
+
   </div>
 
   <!-- Alerte stock faible -->
-  <div *ngIf="stats && stats.global_stats">
-    <div class="alert warning" *ngIf="stats.global_stats.low_stock_products > 0">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>Attention: {{ stats.global_stats.low_stock_products }} produits nécessitent un réapprovisionnement.</span>
+  <div *ngIf="stats && stats.global_stats.low_stock_products > 0" class="alert-container">
+    <div class="alert warning">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>Attention: {{ stats.global_stats.low_stock_products }} produits nécessitent un réapprovisionnement.</span>
+      <button class="alert-action" (click)="showLowStockProducts()">Voir les produits</button>
     </div>
-</div>
-
+  </div>
 </div>

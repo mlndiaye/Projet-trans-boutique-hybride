@@ -5,17 +5,10 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 from PIL import Image
+from categories.models import Category
 
 
 from django.conf import settings
-
-class Category(models.Model):
-    id_category = models.AutoField(primary_key=True)
-    name_category = models.CharField(max_length=100)
-    description = models.TextField()
-
-    def __str__(self) -> str:
-        return self.name_category
 
 class Product(models.Model):
     id_product = models.AutoField(primary_key=True)
@@ -23,6 +16,7 @@ class Product(models.Model):
     description = models.TextField()
     price_product = models.DecimalField(max_digits=17, decimal_places=2)
     stock = models.IntegerField()
+    minimum_stock = models.IntegerField(default=0)  # Ajouter le champ minimum_stock
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     qr_code = models.ImageField(upload_to='products/qr_codes/', blank=True)

@@ -1,5 +1,7 @@
 # serializers.py
 from rest_framework import serializers
+
+from categories.serializers import CategorySerializer
 from .models import Product, Category, Image
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -7,10 +9,6 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['id_img', 'src_img']
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id_category', 'name_category', 'description']
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
@@ -32,3 +30,12 @@ class ProductSerializer(serializers.ModelSerializer):
         for image_data in images_data.getlist('images'):
             Image.objects.create(produit=produit, src_img=image_data)
         return produit
+    
+
+    
+
+class LowStockProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id_product', 'name_product', 'stock', 'minimum_stock', 'category']
+        depth = 1 
