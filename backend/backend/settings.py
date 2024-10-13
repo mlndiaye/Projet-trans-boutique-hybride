@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'products',
+    'categories',
     'users',
 
 ]
@@ -168,6 +169,12 @@ CORS_ALLOW_METHODS = (
     'OPTIONS'
 )
 BASE_URL = 'https://mlndiaye.pythonanywhere.com'
+
+
+
+ANGULAR_DASHBOARD_URL = "http://localhost:4200/#/dashboard-stats"
+
+
 JAZZMIN_SETTINGS = {
     "site_title": "Page Admin",
     "site_header": "hybride p-Shop",
@@ -178,10 +185,27 @@ JAZZMIN_SETTINGS = {
     "search_model": AUTH_USER_MODEL,  # Indique le modèle à rechercher (ici, le modèle User)
     "search_url": "/admin/auth/user/",  # URL où se trouve la recherche
     "topmenu_links": [
-        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Home", 
+         "url": "admin:index", 
+         "permissions": ["auth.view_user"]},
         {"model": "auth.User"},  # Ajoute un lien direct vers la recherche utilisateur
-        {"app": "products"}
-
+        {"app": "products"},
+        # Nouveau lien vers le dashboard
+        {
+            "name": "📊 Dashboard Stats", 
+            "url": 'http://localhost:8000/auth/admin/redirect-to-dashboard/',
+            "permissions": ["auth.view_user"],
+            "new_window": True
+        }
     ],
 
+    # Configuration des icônes
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "products.product": "fas fa-shopping-cart",
+        "products.category": "fas fa-tags",
+    },
 }
+
+
