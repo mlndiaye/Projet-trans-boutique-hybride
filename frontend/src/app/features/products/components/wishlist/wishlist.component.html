@@ -1,0 +1,62 @@
+<section class="wishlist">
+    <div class="container ">
+        <div class="container d-flex justify-content-between align-items-center mb-3">
+            <span>Wishlist({{ wishlist_products.length }})</span>
+            <button class="btn btn-outline-dark" (click)="clearWishlist()">Supprimer tous mes coups de coeur</button>    
+        </div>
+        <div class="container" style="max-width: max-content;">
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 gap-3">
+                <div *ngFor="let p of wishlist_products" class="card position-relative border px-0" style="width: 18rem;">
+                    <!-- Discount label -->
+                    <div class="discount-label position-absolute top-0 start-0 bg-danger text-white px-2 py-1" style="border-radius: 5px;">
+                      -35%
+                    </div>
+            
+                    <!-- Product image with cart button overlay -->
+                    <div class="d-flex justify-content-center py-5 card-img position-relative">
+                        <img
+                        [src]="p.images.length ? p.images[0].src_img : 'assets/img/placeholder.jpg'"
+                        class="card-img-top"
+                        alt="{{ p.name_product }}"
+                        style="width: 80%; max-width: 150px;">
+            
+                        <!-- Add to cart button -->
+                        <div class="add-to-cart-btn text-center py-1 position-absolute w-100" style="background-color: black; opacity: 0; transition: opacity 0.3s; bottom: 0;">
+                            <a class="btn text-decoration-none text-white" (click)="addToCart(p)">Ajouter au panier</a>
+                        </div>
+                    </div>
+            
+                    <!-- Action buttons -->
+                    <div class="action-buttons position-absolute top-0 end-0 m-2 d-flex flex-column gap-2" style="opacity: 0; transition: opacity 0.3s;">
+                        <button class="btn btn-light rounded-circle shadow-sm p-2" (click)="removeFromWishlist(p.id_product)">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                      <a [routerLink]="['/produit', p.id_product]" class="btn btn-light rounded-circle shadow-sm p-2">
+                        <i class="far fa-eye"></i>
+                      </a>
+                    </div>
+            
+                    <!-- Card body with product details -->
+                    <div class="card-body pt-0">
+                      <h5 class="card-title fs-6 fw-bold">{{ p.name_product }}</h5>
+                      <p class="card-text mb-1">
+                        <span class="current-price" style="color: #db4444;">{{ p.price_product | currency: 'XOF' }}</span>
+                        &nbsp;
+                        <span class="old-price text-decoration-line-through text-secondary">{{300 | currency: 'XOF'}}</span>
+                      </p>
+                      <div class="d-flex">
+                        <div style="color: orange;">
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                        </div>
+                        <sup class="text-secondary ms-2">(738)</sup>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

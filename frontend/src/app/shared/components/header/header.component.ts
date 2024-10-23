@@ -4,11 +4,13 @@ import { AuthService } from '../../../features/authentication/services/auth.serv
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../features/products/services/cart.service';
+import { WishlistService } from '../../../features/products/services/wishlist.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -20,11 +22,19 @@ export class HeaderComponent implements OnInit{
   router = inject(Router);
   cartItemsCount: number = 0;
   cartService = inject(CartService);
+  wishlistCount: number = 0;
+  wishlistService = inject(WishlistService);
+  searchTerm: string = '';
 
   constructor() {
     this.cartService.cart$.subscribe(cart => {
       this.cartItemsCount = cart.items.length;
     });
+    this.wishlistService.wishlist$.subscribe(
+      wishlist => {
+        this.wishlistCount = wishlist.length;
+      }
+    );
    }
 
   ngOnInit(): void {
@@ -37,7 +47,9 @@ export class HeaderComponent implements OnInit{
         });
       }
     });
+    
   }
+
 
   logout(): void {
     this.authService.logout();
@@ -46,5 +58,24 @@ export class HeaderComponent implements OnInit{
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  getWishlistCount(): void {
+    this.wishlistService.getWishlist().subscribe(
+      (wishlist) => {
+        this.wishlistCount = wishlist.length;
+      },
+      (error) => {
+        console.error('Error fetching wishlist count:', error);
+      }
+    );
+  }
+
+  onSearch() {
+    if (this.searchTerm) {
+      this.router.navigate(['/products/search'], {
+        queryParams: { name_product: this.searchTerm }
+      });
+    }
   }
 }

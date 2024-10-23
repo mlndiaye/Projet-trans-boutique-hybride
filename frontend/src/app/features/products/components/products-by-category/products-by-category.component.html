@@ -54,99 +54,74 @@
     </section>
     
 
-    <section class="flash-deals mt-5">
-        <div class="d-flex">
-            <div class="red-div"></div> &nbsp;
-            <span style="color: #db4444; font-weight: 500;" >Aujourd'hui</span>
-        </div>
-        <div class="d-flex justify-content-between mb-3">
-            <div class="d-flex">
-                <h3 class="me-5">Ventes Flash</h3>
-                <div class="countdown-container">
-                    <div>
-                      <span>03</span>
-                      <p>Jours</p>
-                    </div>
-                    <span style="color: #db4444;">:</span>
-                    <div>
-                      <span>23</span>
-                      <p>Heures</p>
-                    </div>
-                    <span style="color: #db4444;">:</span>
-                    <div>
-                      <span>19</span>
-                      <p>Minutes</p>
-                    </div>
-                    <span style="color: #db4444;">:</span>
-                    <div>
-                      <span>56</span>
-                      <p>Secondes</p>
-                    </div>
-                </div>
-            </div>
-            <div class="">
-                <button class="border-0 px-2 py-1 rounded-circle me-2 d-inline-block"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="border-0 px-2 py-1 rounded-circle d-inline-block"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-        </div>
+    <section class="products-by-category mt-5">
         <div class="container">
-            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 gap-3">
-                <div *ngFor="let p of products" class="card position-relative border px-0" style="width: 18rem;">
-                    <!-- Discount label -->
-                    <div class="discount-label position-absolute top-0 start-0 bg-danger text-white px-2 py-1" style="border-radius: 5px;">
-                      -35% 
-                    </div>
-            
-                    <!-- Product image with cart button overlay -->
-                    <div class="d-flex justify-content-center py-5 card-img position-relative">
-                        <img
-                        [src]="p.images.length ? p.images[0].src_img : 'assets/img/placeholder.jpg'"
-                        class="card-img-top"
-                        alt="{{ p.name_product }}"
-                        style="width: 80%; max-width: 150px;">
-            
-                        <!-- Add to cart button -->
-                        <div class="add-to-cart-btn text-center py-1 position-absolute w-100" style="background-color: black; opacity: 0; transition: opacity 0.3s; bottom: 0;">
-                            <a class="btn text-decoration-none text-white" (click)="addToCart(p)">Ajouter au panier</a>
+            <div class="d-flex mb-3 ">
+                <div class="red-div"></div> &nbsp;
+                <span style="color: #db4444; font-weight: 500;">{{category?.name_category}}</span>
+            </div>
+            <ng-template #emptyCategoryBlock>
+                <span>Pas de produits trouvés</span>
+            </ng-template>
+            <div *ngIf="products.length>0; else emptyCategoryBlock" class="container">
+                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 gap-3">
+                    <div *ngFor="let p of products" class="card position-relative border px-0" style="width: 18rem;">
+                        <!-- Discount label -->
+                        <div class="discount-label position-absolute top-0 start-0 bg-danger text-white px-2 py-1" style="border-radius: 5px;">
+                          -35%
                         </div>
-                    </div>
-            
-                    <!-- Action buttons -->
-                    <div class="action-buttons position-absolute top-0 end-0 m-2 d-flex flex-column gap-2" style="opacity: 0; transition: opacity 0.3s;">
-                        <button class="btn btn-light rounded-circle shadow-sm p-2" (click)="toggleWishlist(p)">
-                            <i class="far fa-heart"></i>
-                          </button>
-                      <a [routerLink]="['produit', p.id_product]" class="btn btn-light rounded-circle shadow-sm p-2" (click)="getProductDetails(p.id_product)">
-                        <i class="far fa-eye"></i>
-                      </a>
-                    </div>
-            
-                    <!-- Card body with product details -->
-                    <div class="card-body pt-0 ">
-                      <h5 class="card-title fs-6 fw-bold">{{ p.name_product }}</h5>
-                      <p class="card-text mb-1">
-                        <span class="current-price" style="color: #db4444;">{{ p.price_product | currency: 'XOF' }}</span>
-                        &nbsp;
-                        <span class="old-price text-decoration-line-through text-secondary">{{300 | currency: 'XOF'}}</span>
-                      </p>
-                      <div class="d-flex">
-                        <div style="color: orange;">
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
+                
+                        <!-- Product image with cart button overlay -->
+                        <div class="d-flex justify-content-center py-5 card-img position-relative">
+                            <img
+                            [src]="p.images.length ? p.images[0].src_img : 'assets/img/placeholder.jpg'"
+                            class="card-img-top"
+                            alt="{{ p.name_product }}"
+                            style="width: 80%; max-width: 150px;">
+                
+                            <!-- Add to cart button -->
+                            <div class="add-to-cart-btn text-center py-1 position-absolute w-100" style="background-color: black; opacity: 0; transition: opacity 0.3s; bottom: 0;">
+                                <a class="btn text-decoration-none text-white" (click)="addToCart(p)">Ajouter au panier</a>
+                            </div>
                         </div>
-                        <sup class="text-secondary ms-2">(738)</sup>
-                      </div>
+                
+                        <!-- Action buttons -->
+                        <div class="action-buttons position-absolute top-0 end-0 m-2 d-flex flex-column gap-2" style="opacity: 0; transition: opacity 0.3s;">
+                            <button class="btn btn-light rounded-circle shadow-sm p-2" (click)="toggleWishlist(p)">
+                                <i class="far fa-heart"></i>
+                              </button>
+                          <a [routerLink]="['produit', p.id_product]" class="btn btn-light rounded-circle shadow-sm p-2" (click)="getProductDetails(p.id_product)">
+                            <i class="far fa-eye"></i>
+                          </a>
+                        </div>
+                
+                        <!-- Card body with product details -->
+                        <div class="card-body pt-0 ">
+                          <h5 class="card-title fs-6 fw-bold">{{ p.name_product }}</h5>
+                          <p class="card-text mb-1">
+                            <span class="current-price" style="color: #db4444;">{{ p.price_product | currency: 'XOF' }}</span>
+                            &nbsp;
+                            <span class="old-price text-decoration-line-through text-secondary">{{300 | currency: 'XOF'}}</span>
+                          </p>
+                          <div class="d-flex">
+                            <div style="color: orange;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                            </div>
+                            <sup class="text-secondary ms-2">(738)</sup>
+                          </div>
+                        </div>
                     </div>
                 </div>
+                <div class="text-center my-3"><a class="btn btn-danger ">Voir tous les produits</a></div>
             </div>
         </div>
-        <div class="text-center my-3"><a class="btn btn-danger ">Voir tous les produits</a></div>
     </section>
 
-    <section class="categories-cards my-5">
+    <section class="container categories-cards my-5">
         <div class="d-flex">
             <div class="red-div"></div> &nbsp;
             <span style="color: #db4444; font-weight: 500;">Categories</span>
@@ -160,7 +135,7 @@
         </div>
         <div class="d-flex justify-content-between">
             <ng-container *ngFor="let c of categories">
-                <a [routerLink]="[ c.name_category]"  class="btn d-block px-5 py-2 border border-secondary rounded-1 bg-white">
+                <a [routerLink]="['/', c.name_category]"  class="btn d-block px-5 py-2 border border-secondary rounded-1 bg-white">
                     <img [src]="c.img_category" [alt]="c.name_category">
                     <p class="mt-2">{{c.name_category}}</p>
                 </a>
@@ -168,7 +143,7 @@
         </div>
     </section>
 
-    <section class="our-services d-flex justify-content-between mb-5">
+    <section class="containerour-services d-flex justify-content-between mb-5">
         <div class="">
             <div class="px-2 py-2  rounded-circle w-25 mx-auto" style="max-width: max-content; background-color: #c1c0c1;" >
                 <div class=" rounded-circle p-1 bg-dark d-flex justify-content-center" style="max-width: max-content;">

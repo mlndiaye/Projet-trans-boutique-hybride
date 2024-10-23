@@ -1,18 +1,38 @@
 # views.py
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import Product, Category, CartOrder, CartOrderItem, Product
+from .models import Product, Category, CartOrder, CartOrderItem, Product, Wishlist
 from .serializers import ProductSerializer, CategorySerializer
 from django.shortcuts import render, get_object_or_404
-
+from django_filters import rest_framework as filters
+from .filters import ProductFilter
+from django.http import JsonResponse
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilter
+
+    @action(detail=False, methods=['get'], url_path='category/(?P<category_name>[^/]+)')
+    def by_category(self, request, category_name=None):
+        category = Category.objects.get(name_category = category_name)
+        products = Product.objects.filter(category = category)
+        serializer = self.get_serializer(products, many=True)
+        return Response(serializer.data)
+
+""" class ProductByCategoryView(generics.ListAPIView):
+    def get_queryset(self):
+        category_name = self.kwargs['category']
+        category = Category.objects.get(name_category = category_name)
+        return Product.objects.filter(category = category)
+    serializer_class = ProductSerializer """
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -91,3 +111,64 @@ class CreateOrderView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_wishlist(request):
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+    products = [item.product for item in wishlist_items]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def toggle_wishlist(request):
+    product_id = request.data.get('product_id')
+    user = request.user
+    
+    try:
+        wishlist_item = Wishlist.objects.get(user=user, product_id=product_id)
+        return Response({'status': 'already_in_wishlist'}, status=status.HTTP_200_OK)
+    
+    except Wishlist.DoesNotExist:
+        Wishlist.objects.create(user=user, product_id=product_id)
+        return Response({'status': 'added'})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def remove_from_wishlist(request, product_id):
+    user = request.user
+    try:
+        wishlist_item = Wishlist.objects.get(user=user, product_id=product_id)
+        wishlist_item.delete()
+        return Response({'status': 'removed'}, status=status.HTTP_200_OK)
+    except Wishlist.DoesNotExist:
+        return Response({'status': 'not_in_wishlist'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def clear_wishlist(request):
+    user = request.user
+    Wishlist.objects.filter(user=user).delete()
+    return Response({'status': 'wishlist_cleared'}, status=status.HTTP_200_OK)
+
+
+
+"""         Wishlist.objects.all().delete()
+ """
+
+
+
+@api_view(['GET'])
+def search_products(request):
+    products = Product.objects.all()
+    product_filter = ProductFilter(request.GET, queryset=products)
+    filtered_products = product_filter.qs
+
+    serializer = ProductSerializer(filtered_products, many=True)
+    
+    return JsonResponse(serializer.data, safe=False)

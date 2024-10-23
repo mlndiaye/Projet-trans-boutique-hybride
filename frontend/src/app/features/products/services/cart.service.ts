@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ProductService } from './product.service';
+import { Product, ProductService } from './product.service';
 
 
 export interface CartItem {
@@ -27,8 +27,12 @@ export class CartService {
 
   constructor(private productService: ProductService) {}
 
-  private calculateTotalAmount(items: CartItem[]): number {
+  calculateTotalAmount(items: CartItem[]): number {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
+  }
+
+  getItemSubtotal(item: CartItem): number {
+    return item.price * item.quantity;
   }
 
   private saveCart(cart: ShoppingCart): void {
@@ -54,35 +58,28 @@ export class CartService {
     this.saveCart(cart);
   }
 
-  /* addItem(product_id: number, quantity: number = 1) {
-    this.productService.getProductById().subscribe((product: Product) => {
-      if (product) {
-        const currentCart = this.cartSubject.value;
-        const existingItem = currentCart.items.find((i) => i.id === product_id);
+  addItem(product: Product, quantity: number = 1) {
+    const currentCart = this.cartSubject.value;
+    const existingItem = currentCart.items.find((i) => i.id === product.id_product);
 
-        if (existingItem) {
-          // Increment quantity if item already exists
-          existingItem.quantity += quantity;
-        } else {
-          // Add the new item if it doesn't exist
-          const newItem: CartItem = {
-            id: product.id_product,
-            name: product.name_product,
-            price: parseFloat(product.price_product),
-            quantity: quantity,
-            image: product.images[0]
-          };
-          currentCart.items.push(newItem);
-        }
+    if (existingItem) {
+      // Increment quantity if item already exists
+      existingItem.quantity += quantity;
+    } else {
+      // Add the new item if it doesn't exist
+      const newItem: CartItem = {
+        id: product.id_product,
+        name: product.name_product,
+        price: parseFloat(product.price_product),
+        quantity: quantity,
+        image: product.images.length > 0 ? product.images[0].src_img : ''
+      };
+      currentCart.items.push(newItem);
+    }
 
-        currentCart.totalAmount = this.calculateTotalAmount(currentCart.items);
-        this.updateCartSubject(currentCart);
-      } else {
-        // Gérer le cas où le produit n'est pas trouvé
-        console.error(`Produit avec l'ID ${product_id} non trouvé.`);
-      }
-    });
-  } */
+    currentCart.totalAmount = this.calculateTotalAmount(currentCart.items);
+    this.updateCartSubject(currentCart);
+  }
 
   removeItem(product_id: number) {
     const currentCart = this.cartSubject.value;

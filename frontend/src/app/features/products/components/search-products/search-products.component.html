@@ -1,0 +1,46 @@
+<div class="container">
+  <!-- Résultats de recherche -->
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <!-- Filtres -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Filtres</h5>
+          <form (ngSubmit)="applyFilters()">            
+            <!-- Tri -->
+            <div class="mb-3">
+              <label class="form-label">Trier par</label>
+              <select class="form-select" [(ngModel)]="sortBy" name="sortBy">
+                <option value="price_product">Prix</option>
+                <option value="created_at">Date</option>
+              </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+              Appliquer les filtres
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-9">
+      <!-- Liste des produits -->
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let product of products">
+          <div class="card h-100">
+            <img 
+              [src]="product.images[0].src_img" 
+              class="card-img-top" 
+              alt="{{ product.name_product }}"
+            >
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name_product }}</h5>
+              <p class="card-text">{{ product.price_product }} €</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

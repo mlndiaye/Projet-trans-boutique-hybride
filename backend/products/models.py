@@ -18,6 +18,7 @@ STATUS_CHOICE = (
 class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
     name_category = models.CharField(max_length=100)
+    img_category = models.ImageField(upload_to='categories', default='img-category')
     description = models.TextField()
 
     def __str__(self) -> str:
@@ -79,3 +80,14 @@ class CartOrderItem(models.Model):
     class Meta:
         verbose_name_plural = "Cart Order Item"
 
+class Wishlist(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'wishlists'
+        unique_together = ('user', 'product')
+    
+    def __str__(self) -> str:
+        return self.product.name_product
